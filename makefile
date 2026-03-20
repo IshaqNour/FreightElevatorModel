@@ -14,14 +14,31 @@
 CC=g++
 CFLAGS=-std=c++17
 
-# Cadmium includes (adjust if needed)
-INCLUDECADMIUM=-I ./cadmium/include
+# Cadmium include path resolution:
+# 1) CADMIUM_DIR (explicit override), defaulting to sibling cadmium_v2
+# 2) fallback to sibling cadmium
+CADMIUM_DIR ?= ../cadmium_v2
+ifeq ("$(wildcard $(CADMIUM_DIR)/include)","")
+ifeq ("$(wildcard ../cadmium/include)","")
+$(error Could not find Cadmium headers. Clone cadmium_v2 beside this repo, or run 'make CADMIUM_DIR=/path/to/cadmium_v2')
+else
+CADMIUM_DIR := ../cadmium
+endif
+endif
+
+INCLUDECADMIUM=-I $(CADMIUM_DIR)/include
+
+# Optional DESTimes include for older layouts
+ifneq ("$(wildcard ../../DESTimes/include)","")
 INCLUDEDESTIMES=-I ../../DESTimes/include
+else
+INCLUDEDESTIMES=
+endif
 
 # Local includes
 INCLUDELOCAL=-I ./atomics -I ./data_structures -I ./top_model
 
-# Ensure expected folders exist 
+# Ensure expected folders exist
 $(shell mkdir -p bin)
 $(shell mkdir -p build)
 $(shell mkdir -p simulation_results)
