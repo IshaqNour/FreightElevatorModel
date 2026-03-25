@@ -10,7 +10,12 @@ mkdir -p simulation_results
 make clean
 make
 
-./bin/ECALL_TEST > simulation_results/ecall_output.txt
+./bin/ECALL_TEST input_data/ecall_inside.txt input_data/empty_outside.txt simulation_results/A1_ecall.csv
+./bin/ECALL_TEST input_data/empty_inside.txt input_data/ecall_outside.txt simulation_results/A2_ecall.csv
+./bin/ECALL_TEST input_data/ecall_inside.txt input_data/ecall_outside.txt simulation_results/A3_ecall.csv
 
-echo "ECall test complete."
-echo "CAT results in simulation_results/ecall_output.txt"
+echo "ECall experiments complete."
+echo "Generated:"
+echo "  simulation_results/A1_ecall.csv"
+echo "  simulation_results/A2_ecall.csv"
+echo "  simulation_results/A3_ecall.csv"

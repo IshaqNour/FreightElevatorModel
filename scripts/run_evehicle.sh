@@ -10,7 +10,8 @@ mkdir -p simulation_results
 make clean
 make
 
-./bin/EVEHICLE_TEST > simulation_results/evehicle_output.txt
+./bin/EVEHICLE_TEST input_data/evehicle_single_in.txt simulation_results/A4_evehicle.csv
 
-echo "EVehicle test complete."
-echo "CAT results in simulation_results/evehicle_output.txt"
+echo "EVehicle experiment complete."
+echo "Generated:"
+echo "  simulation_results/A4_evehicle.csv"

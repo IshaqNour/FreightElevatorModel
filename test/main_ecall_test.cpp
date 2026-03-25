@@ -5,7 +5,7 @@
 #include <cadmium/modeling/devs/coupled.hpp>
 #include <cadmium/lib/iestream.hpp>
 #include <cadmium/simulation/root_coordinator.hpp>
-#include <cadmium/simulation/logger/stdout.hpp>
+#include <cadmium/simulation/logger/csv.hpp>
 
 #include "../atomics/ecall.hpp"
 #include "../data_structures/messages.hpp"
@@ -21,15 +21,18 @@ using namespace cadmium;
 struct ECallExperiment : public Coupled {
     Port<fe::Floor> call_gen;  // output port (mirrors ECall output)
 
-    explicit ECallExperiment(const string& id) : Coupled(id) {
+    ECallExperiment(const string& id,
+                    const string& inside_calls_path,
+                    const string& outside_calls_path)
+        : Coupled(id) {
 
         call_gen = addOutPort<fe::Floor>("call_gen");
 
         auto inside_calls = addComponent<lib::IEStream<fe::Floor>>(
-          "inside_calls", "input_data/ecall_inside.txt");
+          "inside_calls", inside_calls_path.c_str());
 
         auto outside_calls = addComponent<lib::IEStream<fe::Floor>>(
-          "outside_calls", "input_data/ecall_outside.txt");
+          "outside_calls", outside_calls_path.c_str());
 
         auto ecall = addComponent<ECall>("ECall");
 
@@ -42,14 +45,26 @@ struct ECallExperiment : public Coupled {
     }
 };
 
-int main() {
-    auto model = make_shared<ECallExperiment>("ECallExperiment");
+int main(int argc, char* argv[]) {
+    string inside_path  = "input_data/ecall_inside.txt";
+    string outside_path = "input_data/ecall_outside.txt";
+    string out_csv      = "simulation_results/A3_ecall.csv";
+
+    if (argc >= 3) {
+        inside_path = argv[1];
+        outside_path = argv[2];
+    }
+    if (argc >= 4) {
+        out_csv = argv[3];
+    }
+
+    auto model = make_shared<ECallExperiment>("ECallExperiment", inside_path, outside_path);
 
     auto rootCoordinator = RootCoordinator(model);
-    rootCoordinator.setLogger<STDOUTLogger>(";");
+    rootCoordinator.setLogger<CSVLogger>(out_csv, ";");
 
     rootCoordinator.start();
-    rootCoordinator.simulate(50.0); 
+    rootCoordinator.simulate(50.0);
     rootCoordinator.stop();
 
     return 0;

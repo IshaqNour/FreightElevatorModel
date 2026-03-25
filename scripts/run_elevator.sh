@@ -10,7 +10,10 @@ mkdir -p simulation_results
 make clean
 make
 
-./bin/ELEVATOR_TEST > simulation_results/elevator_output.txt
+./bin/ELEVATOR_TEST input_data/elevator_calls_test.txt simulation_results/C1_elevator.csv
+./bin/ELEVATOR_TEST input_data/elevator_queue_calls.txt simulation_results/C2_elevator.csv
 
-echo "Elevator coupled test complete."
-echo "CAT results in simulation_results/elevator_output.txt"
+echo "Elevator coupled experiments complete."
+echo "Generated:"
+echo "  simulation_results/C1_elevator.csv"
+echo "  simulation_results/C2_elevator.csv"

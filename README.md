@@ -1,6 +1,9 @@
 # Freight Elevator Model
 
-This repository contains a Cadmium DEVS model of a freight elevator system. The model logic is organized into atomic components for call handling, control, and vehicle movement, plus coupled models that connect those parts into the full system.
+This repository contains a Cadmium DEVS model of a freight elevator system. The
+model logic is organized into atomic components for call handling, control, and
+vehicle movement, plus coupled models that connect those parts into the full
+system.
 
 ## Project Layout
 
@@ -29,21 +32,31 @@ Input trajectories used by the test drivers and full-system run.
 
 `scripts/`
 Bash launch scripts for each simulation:
-- `run_ecall.sh`
-- `run_econtrol.sh`
-- `run_evehicle.sh`
-- `run_elevator.sh`
-- `run_freight_elevator.sh`
+- `run_ecall.sh` -> Generates `A1_ecall.csv`, `A2_ecall.csv`, and `A3_ecall.csv`
+- `run_evehicle.sh` -> Generates `A4_evehicle.csv`
+- `run_econtrol.sh` -> Generates `A5_econtrol.csv` and `A6_econtrol.csv`
+- `run_elevator.sh` -> Generates `C1_elevator.csv` and `C2_elevator.csv`
+- `run_freight_elevator.sh` -> Generates `T1_top.csv` and `T2_top.csv`
+- `run_all_experiments.sh` -> Generates all
 
 `simulation_results/`
-Generated text logs from each run.
+Generated CSV logs from each run.
 
 `bin/` and `build/`
 Created automatically during compilation.
 
-## Build Assumption
+## Supported Environment
+- WSL Ubuntu on Windows
+- Git Bash or another bash environment only if `make`, `g++`, and `bash` are all already on `PATH`
+- Linux
 
-This repo expects `cadmium_v2` to sit beside `FreightElevatorModel` in the parent folder:
+The recommended Windows setup is WSL Ubuntu, not native PowerShell or Command
+Prompt.
+
+## Clone Layout
+
+This repo expects `cadmium_v2` to sit beside `FreightElevatorModel` in the same
+parent folder:
 
 ```text
 A1Test/
@@ -57,62 +70,125 @@ The `makefile` includes Cadmium from:
 INCLUDECADMIUM=-I ../cadmium_v2/include
 ```
 
-If your Cadmium folder is somewhere else, update that line in the [makefile](/c:/Users/ishaq/Documents/SYSC4906G/A1Test/FreightElevatorModel/makefile).
+If your Cadmium folder is somewhere else, update that line in the `makefile`.
 
-## Running the Model
+## WSL Workflow
 
-Each script follows the same flow:
-1. `make clean`
-2. `make`
-3. run one executable
-4. redirect the simulator output into `simulation_results/*.txt`
+This is the recommended Windows workflow.
 
-### PowerShell
-
-From the repo root:
-
-```powershell
-cd C:\Users\ishaq\Documents\SYSC4906G\A1Test\FreightElevatorModel
-```
-
-Run the full system:
-
-```powershell
-bash scripts/run_freight_elevator.sh
-cat simulation_results/freight_elevator_output.txt
-```
-
-Run the individual experiments:
-
-```powershell
-bash scripts/run_ecall.sh
-cat simulation_results/ecall_output.txt
-
-bash scripts/run_econtrol.sh
-cat simulation_results/econtrol_output.txt
-
-bash scripts/run_evehicle.sh
-cat simulation_results/evehicle_output.txt
-
-bash scripts/run_elevator.sh
-cat simulation_results/elevator_output.txt
-```
-
-### Linux
+Install the required packages once in Ubuntu/WSL:
 
 ```bash
-./scripts/run_freight_elevator.sh
-./scripts/run_ecall.sh
-./scripts/run_econtrol.sh
-./scripts/run_evehicle.sh
-./scripts/run_elevator.sh
+sudo apt update
+sudo apt install -y build-essential git
+```
+
+If you are cloning from scratch inside WSL:
+
+```bash
+git clone https://github.com/SimulationEverywhere/cadmium_v2 -b dev-rt
+git clone https://github.com/IshaqNour/FreightElevatorModel.git
+cd FreightElevatorModel
+make clean
+make
+```
+
+If the repositories are already on your Windows drive, open WSL and enter the
+repo through `/mnt/c/...`:
+
+```bash
+cd /mnt/c/Users/nou99678/Documents/A1/FreightElevatorModel
+make clean
+make
+```
+
+Run every documented experiment in one command:
+
+```bash
+cd /mnt/c/Users/nou99678/Documents/A1/FreightElevatorModel
+bash scripts/run_all_experiments.sh
+ls simulation_results
+```
+
+Run the experiment scripts one by one:
+
+```bash
+cd /mnt/c/Users/nou99678/Documents/A1/FreightElevatorModel
+
+bash scripts/run_ecall.sh
+cat simulation_results/A1_ecall.csv
+cat simulation_results/A2_ecall.csv
+cat simulation_results/A3_ecall.csv
+
+bash scripts/run_evehicle.sh
+cat simulation_results/A4_evehicle.csv
+
+bash scripts/run_econtrol.sh
+cat simulation_results/A5_econtrol.csv
+cat simulation_results/A6_econtrol.csv
+
+bash scripts/run_elevator.sh
+cat simulation_results/C1_elevator.csv
+cat simulation_results/C2_elevator.csv
+
+bash scripts/run_freight_elevator.sh
+cat simulation_results/T1_top.csv
+cat simulation_results/T2_top.csv
+```
+
+## Bash Workflow
+
+Use this section if you are already in Linux or in a bash environment where
+`make`, `g++`, and `bash` are available on `PATH`.
+
+Clone and build:
+
+```bash
+git clone https://github.com/SimulationEverywhere/cadmium_v2 -b dev-rt
+git clone https://github.com/IshaqNour/FreightElevatorModel.git
+cd FreightElevatorModel
+make clean
+make
+```
+
+Run all experiments:
+
+```bash
+bash scripts/run_all_experiments.sh
+ls simulation_results
+```
+
+Run the scripts one by one:
+
+```bash
+bash scripts/run_ecall.sh
+bash scripts/run_evehicle.sh
+bash scripts/run_econtrol.sh
+bash scripts/run_elevator.sh
+bash scripts/run_freight_elevator.sh
+```
+
+Check outputs:
+
+```bash
+cat simulation_results/A1_ecall.csv
+cat simulation_results/A2_ecall.csv
+cat simulation_results/A3_ecall.csv
+cat simulation_results/A4_evehicle.csv
+cat simulation_results/A5_econtrol.csv
+cat simulation_results/A6_econtrol.csv
+cat simulation_results/C1_elevator.csv
+cat simulation_results/C2_elevator.csv
+cat simulation_results/T1_top.csv
+cat simulation_results/T2_top.csv
 ```
 
 ## Output Format
-For the clearest view of the output, please print the file in the terminal:
+
+For the clearest view of the output, print the CSV file in the terminal:
 
 ```bash
-cat simulation_results/freight_elevator_output.txt
+cat simulation_results/T2_top.csv
 ```
 
 ## Included Documents
