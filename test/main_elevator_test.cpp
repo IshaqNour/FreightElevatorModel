@@ -1,11 +1,11 @@
 #include <memory>
 #include <string>
-#include <limits>  // safe if any cadmium header forgets it
+#include <limits>
 
 #include <cadmium/modeling/devs/coupled.hpp>
 #include <cadmium/lib/iestream.hpp>
 #include <cadmium/simulation/root_coordinator.hpp>
-#include <cadmium/simulation/logger/csv.hpp>
+#include <cadmium/simulation/logger/stdout.hpp>
 
 #include "../top_model/elevator_coupled.hpp"
 #include "../data_structures/messages.hpp"
@@ -20,12 +20,12 @@ using namespace cadmium;
 struct ElevatorExperiment : public Coupled {
     Port<fe::Floor> floor;
 
-    ElevatorExperiment(const string& id, const char* calls_path)
-        : Coupled(id) {
+    explicit ElevatorExperiment(const string& id) : Coupled(id) {
 
         floor = addOutPort<fe::Floor>("floor");
 
-        auto calls    = addComponent<lib::IEStream<fe::Floor>>("calls", calls_path);
+        auto calls    = addComponent<lib::IEStream<fe::Floor>>(
+            "calls", "input_data/elevator_calls_test.txt");
         auto elevator = addComponent<ElevatorCoupled>("Elevator");
 
         addCoupling(calls->out, elevator->acall);
@@ -33,18 +33,11 @@ struct ElevatorExperiment : public Coupled {
     }
 };
 
-int main(int argc, char* argv[]) {
-    // Default input file
-    string calls_path = "input_data/elevator_calls_test.txt";
-    string out_csv    = "simulation_results/C1_elevator.csv";
-
-    if (argc >= 2) calls_path = argv[1];
-    if (argc >= 3) out_csv = argv[2];
-
-    auto model = make_shared<ElevatorExperiment>("ElevatorExperiment", calls_path.c_str());
+int main() {
+    auto model = make_shared<ElevatorExperiment>("ElevatorExperiment");
 
     auto rootCoordinator = RootCoordinator(model);
-    rootCoordinator.setLogger<CSVLogger>(out_csv, ";");
+    rootCoordinator.setLogger<STDOUTLogger>(";");
 
     rootCoordinator.start();
     rootCoordinator.simulate(60.0);

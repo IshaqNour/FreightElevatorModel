@@ -1,11 +1,11 @@
 #include <memory>
 #include <string>
+#include <limits>
 
 #include <cadmium/modeling/devs/coupled.hpp>
-#include <limits>
 #include <cadmium/lib/iestream.hpp>
 #include <cadmium/simulation/root_coordinator.hpp>
-#include <cadmium/simulation/logger/csv.hpp>
+#include <cadmium/simulation/logger/stdout.hpp>
 
 #include "../atomics/ecall.hpp"
 #include "../data_structures/messages.hpp"
@@ -21,18 +21,15 @@ using namespace cadmium;
 struct ECallExperiment : public Coupled {
     Port<fe::Floor> call_gen;  // output port (mirrors ECall output)
 
-    ECallExperiment(const string& id,
-                    const string& inside_calls_path,
-                    const string& outside_calls_path)
-        : Coupled(id) {
+    explicit ECallExperiment(const string& id) : Coupled(id) {
 
         call_gen = addOutPort<fe::Floor>("call_gen");
 
         auto inside_calls = addComponent<lib::IEStream<fe::Floor>>(
-          "inside_calls", inside_calls_path.c_str());
+          "inside_calls", "input_data/ecall_inside.txt");
 
         auto outside_calls = addComponent<lib::IEStream<fe::Floor>>(
-          "outside_calls", outside_calls_path.c_str());
+          "outside_calls", "input_data/ecall_outside.txt");
 
         auto ecall = addComponent<ECall>("ECall");
 
@@ -45,27 +42,11 @@ struct ECallExperiment : public Coupled {
     }
 };
 
-int main(int argc, char* argv[]) {
-    // Defaults are relative to repo root 
-    string inside_path  = "input_data/ecall_inside.txt";
-    string outside_path = "input_data/empty_outside.txt";
-
-    // Default output path
-    string out_path = "simulation_results/A1_ecall.csv";
-    
-    // Optional override:
-    if (argc >= 3) {
-        inside_path  = argv[1];
-        outside_path = argv[2];
-    }
-    if (argc >= 4) {
-        out_path = argv[3];
-    }
-
-    auto model = make_shared<ECallExperiment>("ECallExperiment", inside_path, outside_path);
+int main() {
+    auto model = make_shared<ECallExperiment>("ECallExperiment");
 
     auto rootCoordinator = RootCoordinator(model);
-    rootCoordinator.setLogger<CSVLogger>(out_path, ";");
+    rootCoordinator.setLogger<STDOUTLogger>(";");
 
     rootCoordinator.start();
     rootCoordinator.simulate(50.0); 
