@@ -72,7 +72,7 @@ INCLUDECADMIUM=-I ../cadmium_v2/include
 
 If your Cadmium folder is somewhere else, update that line in the `makefile`.
 
-## WSL Workflow
+## WSL Workflow (preffered run flow)
 
 This is the recommended Windows workflow.
 
@@ -97,7 +97,7 @@ If the repositories are already on your Windows drive, open WSL and enter the
 repo through `/mnt/c/...`:
 
 ```bash
-cd /mnt/c/Users/nou99678/Documents/A1/FreightElevatorModel
+cd /mnt/c/Users/.../FreightElevatorModel
 make clean
 make
 ```
@@ -105,7 +105,7 @@ make
 Run every documented experiment in one command:
 
 ```bash
-cd /mnt/c/Users/nou99678/Documents/A1/FreightElevatorModel
+cd /mnt/c/Users/.../FreightElevatorModel
 bash scripts/run_all_experiments.sh
 ls simulation_results
 ```
@@ -113,7 +113,7 @@ ls simulation_results
 Run the experiment scripts one by one:
 
 ```bash
-cd /mnt/c/Users/nou99678/Documents/A1/FreightElevatorModel
+cd /mnt/c/Users/.../FreightElevatorModel
 
 bash scripts/run_ecall.sh
 cat simulation_results/A1_ecall.csv
