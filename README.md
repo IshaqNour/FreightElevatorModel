@@ -106,7 +106,7 @@ Run every documented experiment in one command:
 
 ```bash
 cd /mnt/c/Users/.../FreightElevatorModel
-bash scripts/run_all_experiments.sh
+./scripts/run_all_experiments.sh
 ls simulation_results
 ```
 
@@ -115,23 +115,23 @@ Run the experiment scripts one by one:
 ```bash
 cd /mnt/c/Users/.../FreightElevatorModel
 
-bash scripts/run_ecall.sh
+./scripts/run_ecall.sh
 cat simulation_results/A1_ecall.csv
 cat simulation_results/A2_ecall.csv
 cat simulation_results/A3_ecall.csv
 
-bash scripts/run_evehicle.sh
+./scripts/run_evehicle.sh
 cat simulation_results/A4_evehicle.csv
 
-bash scripts/run_econtrol.sh
+./scripts/run_econtrol.sh
 cat simulation_results/A5_econtrol.csv
 cat simulation_results/A6_econtrol.csv
 
-bash scripts/run_elevator.sh
+./scripts/run_elevator.sh
 cat simulation_results/C1_elevator.csv
 cat simulation_results/C2_elevator.csv
 
-bash scripts/run_freight_elevator.sh
+./scripts/run_freight_elevator.sh
 cat simulation_results/T1_top.csv
 cat simulation_results/T2_top.csv
 ```
