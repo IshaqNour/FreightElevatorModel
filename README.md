@@ -89,8 +89,8 @@ If you are cloning from scratch inside WSL:
 git clone https://github.com/SimulationEverywhere/cadmium_v2 -b dev-rt
 git clone https://github.com/IshaqNour/FreightElevatorModel.git
 cd FreightElevatorModel
-make clean
-make
+#make clean -- Each individual script has "make clean" and "make"
+#make       |___^
 ```
 
 If the repositories are already on your Windows drive, open WSL and enter the
@@ -98,8 +98,6 @@ repo through `/mnt/c/...`:
 
 ```bash
 cd /mnt/c/Users/.../FreightElevatorModel
-make clean
-make
 ```
 
 Run every documented experiment in one command:
