@@ -53,24 +53,20 @@ Created automatically during compilation.
 The recommended Windows setup is WSL Ubuntu, not native PowerShell or Command
 Prompt.
 
-## Clone Layout
+## Cadmium Setup
 
-This repo expects `cadmium_v2` to sit beside `FreightElevatorModel` in the same
-parent folder:
-
-```text
-A1Test/
-|- cadmium_v2/
-|- FreightElevatorModel/
-```
-
-The `makefile` includes Cadmium from:
+The `makefile` resolves Cadmium through a variable:
 
 ```makefile
-INCLUDECADMIUM=-I ../cadmium_v2/include
+INCLUDECADMIUM=-I $(CADMIUM)
 ```
 
-If your Cadmium folder is somewhere else, update that line in the `makefile`.
+If your local Cadmium installation is outside this folder, set `CADMIUM` in WSL so it points to the `cadmium_v2/include` directory:
+
+```bash
+export CADMIUM=/mnt/c/.../path/to/cadmium_v2/include
+echo $CADMIUM
+```
 
 ## WSL Workflow (preffered run flow)
 
@@ -81,14 +77,6 @@ Install the required packages once in Ubuntu/WSL:
 ```bash
 sudo apt update
 sudo apt install -y build-essential git
-```
-
-If you are cloning from scratch inside WSL:
-
-```bash
-git clone https://github.com/SimulationEverywhere/cadmium_v2 -b dev-rt
-git clone https://github.com/IshaqNour/FreightElevatorModel.git
-cd FreightElevatorModel
 ```
 
 If the repositories are already on your Windows drive, open WSL and enter the
@@ -191,3 +179,4 @@ cat simulation_results/T2_top.csv
 
 - `FreightElevator.docx`
 - `DVESmodelForm_FreightElevator.docx`
+

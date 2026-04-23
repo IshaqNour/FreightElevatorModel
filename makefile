@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-std=c++17
-INCLUDECADMIUM=-I ../cadmium_v2/include
+INCLUDECADMIUM=-I $(CADMIUM)
 
 bin_folder := $(shell mkdir -p bin)
 build_folder := $(shell mkdir -p build)
@@ -34,3 +34,4 @@ freight_elevator_system: build/main.o
 
 clean:
 	rm -f bin/* build/*
+
