@@ -61,7 +61,7 @@ The `makefile` resolves Cadmium through a variable:
 INCLUDECADMIUM=-I $(CADMIUM)
 ```
 
-Before building in WSL, set `CADMIUM` so it points to the `cadmium_v2/include` directory:
+In case the `CADMIUM` variable is not picked up in WSL and results in "input files" error, then manually set `CADMIUM` in WSL so it points to the `cadmium_v2/include` directory:
 
 ```bash
 export CADMIUM=/mnt/c/.../path/to/cadmium_v2/include
